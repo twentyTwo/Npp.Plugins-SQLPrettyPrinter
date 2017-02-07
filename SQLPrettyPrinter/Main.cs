@@ -1,30 +1,82 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
-using Kbg.NppPluginNET.PluginInfrastructure;
-using SQLPrettyPrinter;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Main.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The main.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Kbg.NppPluginNET
 {
+    using System;
+    using System.Drawing;
+    using System.IO;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Windows.Forms;
+
+    using Kbg.NppPluginNET.PluginInfrastructure;
+    using Kbg.NppPluginNET.Properties;
+
+    using SQLPrettyPrinter;
+
+    /// <summary>
+    /// The main.
+    /// </summary>
     class Main
     {
+        /// <summary>
+        /// The plugin name.
+        /// </summary>
         internal const string PluginName = "SQLPrettyPrinter";
+
+        /// <summary>
+        /// The ini file path.
+        /// </summary>
         static string iniFilePath = null;
+
+        /// <summary>
+        /// The some setting.
+        /// </summary>
         static bool someSetting = false;
+
+        /// <summary>
+        /// The frm my dlg.
+        /// </summary>
         static frmMyDlg frmMyDlg = null;
+
+        /// <summary>
+        /// The id my dlg.
+        /// </summary>
         static int idMyDlg = -1;
-        static Bitmap tbBmp = Properties.Resources.star;
-        
+
+        /// <summary>
+        /// The tb bmp.
+        /// </summary>
+        static Bitmap tbBmp = Resources.star;
+
+        /// <summary>
+        /// The tb icon.
+        /// </summary>
         static Icon tbIcon = null;
 
+        /// <summary>
+        /// The editor.
+        /// </summary>
         static IScintillaGateway editor = new ScintillaGateway(PluginBase.GetCurrentScintilla());
-        static INotepadPPGateway notepad = new NotepadPPGateway();
-        
 
+        /// <summary>
+        /// The notepad.
+        /// </summary>
+        static INotepadPPGateway notepad = new NotepadPPGateway();
+
+        /// <summary>
+        /// The on notification.
+        /// </summary>
+        /// <param name="notification">
+        /// The notification.
+        /// </param>
         public static void OnNotification(ScNotification notification)
         {  
             // This method is invoked whenever something is happening in notepad++
@@ -32,7 +84,6 @@ namespace Kbg.NppPluginNET
             // if (notification.Header.Code == (uint)NppMsg.NPPN_xxx)
             // { ... }
             // or
-            //
             // if (notification.Header.Code == (uint)SciMsg.SCNxxx)
             // { ... }
         }
@@ -49,7 +100,7 @@ namespace Kbg.NppPluginNET
             iniFilePath = sbIniFilePath.ToString();
             if (!Directory.Exists(iniFilePath)) Directory.CreateDirectory(iniFilePath);
             iniFilePath = Path.Combine(iniFilePath, PluginName + ".ini");
-            someSetting = (Win32.GetPrivateProfileInt("SomeSection", "SomeKey", 0, iniFilePath) != 0);
+            someSetting = Win32.GetPrivateProfileInt("SomeSection", "SomeKey", 0, iniFilePath) != 0;
 
             PluginBase.SetCommand(0, "Uppercase the Keywords", Uppercase);
             PluginBase.SetCommand(1, "Single Line", SingleLine);
