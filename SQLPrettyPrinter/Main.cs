@@ -17,13 +17,8 @@ namespace Kbg.NppPluginNET
         static bool someSetting = false;
         static frmMyDlg frmMyDlg = null;
         static int idMyDlg = -1;
-         static Bitmap tbBmp = Properties.Resources.star;
-        //static Bitmap tbBmp_tbTab = Properties.Resources.star_bmp;
-
-
-        // static Bitmap tbBmp1 = Properties.Resources.prettyPrinter;
-        // static Bitmap tbBmp_tbTab1 = Properties.Resources.star_bmp;
-
+        static Bitmap tbBmp = Properties.Resources.star;
+        
         static Icon tbIcon = null;
 
         static IScintillaGateway editor = new ScintillaGateway(PluginBase.GetCurrentScintilla());
@@ -42,6 +37,9 @@ namespace Kbg.NppPluginNET
             // { ... }
         }
 
+        /// <summary>
+        /// The command menu initialization.
+        /// </summary>
         internal static void CommandMenuInit()
         {
             notepad.SetCurrentLanguage(LangType.L_SQL);
@@ -58,51 +56,69 @@ namespace Kbg.NppPluginNET
             PluginBase.SetCommand(2, "Single Line Double Quote", SingleLineDoubleQoute);
             PluginBase.SetCommand(3, "SQL Pretty Print", MultiLine);
             PluginBase.SetCommand(4, "About", About);
-            // PluginBase.SetCommand(1, "MyDockableDialog", myDockableDialog); 
             idMyDlg = 3;
         }
 
+        /// <summary>
+        /// The set tool bar icon.
+        /// </summary>
         internal static void SetToolBarIcon()
         {
-            toolbarIcons tbIcons = new toolbarIcons { hToolbarBmp = tbBmp.GetHbitmap() };
+            var tbIcons = new toolbarIcons { hToolbarBmp = tbBmp.GetHbitmap() };
             IntPtr pTbIcons = Marshal.AllocHGlobal(Marshal.SizeOf(tbIcons));
             Marshal.StructureToPtr(tbIcons, pTbIcons, false);
             Win32.SendMessage(PluginBase.nppData._nppHandle, (uint) NppMsg.NPPM_ADDTOOLBARICON, PluginBase._funcItems.Items[idMyDlg]._cmdID, pTbIcons);
             Marshal.FreeHGlobal(pTbIcons);
         }
 
+        /// <summary>
+        /// The plugin clean up.
+        /// </summary>
         internal static void PluginCleanUp()
         {
             Win32.WritePrivateProfileString("SomeSection", "SomeKey", someSetting ? "1" : "0", iniFilePath);
         }
 
-
+        /// <summary>
+        /// The about.
+        /// </summary>
         internal static void About()
         {
             MessageBox.Show("noor.alam.shuvo@gmail.com");
-            
         }
 
-        static void Uppercase()
+        /// <summary>
+        /// The uppercase.
+        /// </summary>
+        internal static void Uppercase()
         {
             editor.ReplaceSel(Beautify.GetKeywordsUppercase(editor.GetSelText()));
         }
 
-        static void SingleLine()
+        /// <summary>
+        /// The single line.
+        /// </summary>
+        internal static void SingleLine()
         {
             var selectedText = editor.GetSelText();
             var singleLinePretty = Beautify.GetSingleLinedUpperCasedKeyword(selectedText);
             editor.ReplaceSel(singleLinePretty);
         }
 
-        static void SingleLineDoubleQoute()
+        /// <summary>
+        /// The single line double quote.
+        /// </summary>
+        internal static void SingleLineDoubleQoute()
         {
             var selectedText = editor.GetSelText();
             var convertedText = Beautify.GetDoubleQuotationedQuery(selectedText);
             editor.ReplaceSel(convertedText);
         }
 
-        static void MultiLine()
+        /// <summary>
+        /// The multi line.
+        /// </summary>
+        internal static void MultiLine()
         {
             var selectedText = editor.GetSelText();
             var convertedText = Beautify.PrettyPrinter(selectedText);
