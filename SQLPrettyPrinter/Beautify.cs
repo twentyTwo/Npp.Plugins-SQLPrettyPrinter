@@ -53,33 +53,38 @@ namespace SQLPrettyPrinter
         /// </returns>
         public static string GetSingleLined(string sqlString)
         {
-            var temp = sqlString.Replace("(", " ( ").Replace(")", " ) ").Replace("=", " = ").Replace(",", " ,").Replace(Environment.NewLine, " ")
-                .Replace("''", "'").Replace("\t", " ");
+            var temp = sqlString.Replace("(", " ( ")
+                .Replace(")", " ) ")
+                .Replace("=", " = ")
+                .Replace(",", " ,")
+                .Replace(Environment.NewLine, " ")
+                .Replace("\r", " ")
+                .Replace("''", "'")
+                .Replace("\t", " ");
 
             temp = Regex.Replace(temp, @"\s+", " ");
             return temp;
         }
 
+        /// <summary>
+        /// The get keywords uppercase.
+        /// </summary>
+        /// <param name="SQL Test">
+        /// The sql test.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string GetKeywordsUppercase(string sqlTest)
         {
-            var single = GetSingleLined(sqlTest);
-            var cnt = single.Split(' ').Count();
-
-            for (var i = 0; i < cnt; i++)
+            foreach (var keyword in Keywords)
             {
-                var text = single.Split(' ')[i];
-                var isExists = Keywords.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase));
-
-                if (!isExists)
-                {
-                    continue;
-                }
-               
-                var pattern = @"\b" + text + @"\b";
-
-                sqlTest = Regex.Replace(sqlTest, pattern, text.ToUpper(), RegexOptions.IgnoreCase);
+                var pattern = @"\b" + keyword + @"\b";
+                sqlTest = Regex.Replace(sqlTest, pattern, keyword, RegexOptions.IgnoreCase);
             }
             return sqlTest;
+
+
         }
 
         /// <summary>
@@ -147,8 +152,9 @@ namespace SQLPrettyPrinter
 
 
             var multiLinedText =
-                singledLineText.Replace("FROM", Environment.NewLine + "FROM")
-                    .Replace("WHERE", Environment.NewLine + "WHERE")
+                singledLineText
+                    .Replace("FROM", "\nFROM")
+                    .Replace("WHERE", "\nWHERE")
                     .Replace("INNER", "\n\t" + "INNER")
                     .Replace("LEFT", "\n\t" + "LEFT")
                     .Replace("RIGHT", "\n\t" + "RIGHT")
