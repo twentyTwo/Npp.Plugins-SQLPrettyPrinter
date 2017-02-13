@@ -75,7 +75,7 @@ namespace SQLPrettyPrinter
                     continue;
                 }
                
-                var pattern = @"\b" + text + "\b";
+                var pattern = @"\b" + text + @"\b";
 
                 sqlTest = Regex.Replace(sqlTest, pattern, text.ToUpper(), RegexOptions.IgnoreCase);
             }
