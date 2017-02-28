@@ -1,0 +1,1 @@
+﻿SELECT * FROM A JOIN B ON A.C = B.D
