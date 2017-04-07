@@ -104,7 +104,7 @@ namespace Kbg.NppPluginNET
 
             PluginBase.SetCommand(0, "Uppercase the Keywords", Uppercase);
             PluginBase.SetCommand(1, "Single Line", SingleLine);
-            PluginBase.SetCommand(2, "Single Line Double Quote", SingleLineDoubleQoute);
+            PluginBase.SetCommand(2, "Double Quote", SingleLineDoubleQoute);
             PluginBase.SetCommand(3, "SQL Pretty Print", MultiLine);
             PluginBase.SetCommand(4, "About", About);
             idMyDlg = 3;
